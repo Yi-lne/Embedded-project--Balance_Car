@@ -1,0 +1,24 @@
+"D:\CLion\CLion 2024.1\bin\cmake\win\x64\bin\cmake.exe" --preset Debug -S D:\STM32Projects\Projects\Balance_Car\program -B D:\STM32Projects\Projects\Balance_Car\program\build\Debug
+Preset CMake variables:
+
+  CMAKE_BUILD_TYPE="Debug"
+  CMAKE_TOOLCHAIN_FILE:FILEPATH="D:/STM32Projects/Projects/Balance_Car/program/cmake/gcc-arm-none-eabi.cmake"
+
+-- The C compiler identification is GNU 15.2.1
+-- The CXX compiler identification is GNU 15.2.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: D:/ARM_GCC/bin/arm-none-eabi-gcc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: D:/ARM_GCC/bin/arm-none-eabi-g++.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+Build type: Debug
+-- The ASM compiler identification is GNU
+-- Found assembler: D:/ARM_GCC/bin/arm-none-eabi-gcc.exe
+-- Configuring done (13.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/STM32Projects/Projects/Balance_Car/program/build/Debug
