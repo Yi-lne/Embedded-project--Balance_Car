@@ -48,7 +48,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
         Car_system/Motor/motor.c
         Car_system/Angle/angle.c
-        Car_system/Interruption/it_falg.c
+        Car_system/Interruption/it_flag.c
         Car_system/PID/pid.c
         Car_system/Bluetooth/bluetooth.c
 

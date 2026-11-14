@@ -33,7 +33,7 @@ void MPU6050_Receive_Data(uint8_t register_addr, uint8_t *data, uint16_t len)
                      MPU6050_TIMEOUT_DELAY);
 }
 
-uint8_t rx_data[14] = {0};
+volatile uint8_t rx_data[14] = {0};
 
 /*
  * 开启I2C2 rx的DMA

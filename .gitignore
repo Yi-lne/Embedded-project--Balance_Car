@@ -1,0 +1,50 @@
+# ============================================================
+# STM32 平衡车项目 .gitignore
+# 仅管理 balance_car_program2（当前主线固件）
+# ============================================================
+
+# ---------- 旧工程（不再维护，仅本地保留） ----------
+/balance_car_program/
+
+# ---------- 构建目录与产物 ----------
+build/
+*.elf
+*.bin
+*.hex
+*.map
+*.obj
+*.o
+*.d
+*.su
+*.lst
+*.gcov
+
+# CMake / Ninja 中间文件
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+.ninja_deps
+.ninja_log
+
+# ---------- IDE / 编辑器 ----------
+.idea/
+.vscode/
+*.uvguix.*
+*.uvoptx
+*.uvprojx
+*.ioc.bak
+*.launch
+
+# ---------- 系统与临时文件 ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+*.swp
+*.log
+
+# ---------- 机械模型 / 大体积资料（按需取消注释） ----------
+# sw/
+# 数据手册/

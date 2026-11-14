@@ -33,16 +33,16 @@ void Motor_Init(void)
 void Motor_Stop(void)
 {
     //不设置方向
-//    Motor_SetDirLeft_Stop();
-//    Motor_SetDirLeft_Stop();
+    Motor_SetDirLeft_Stop();
+    Motor_SetDirRight_Stop();
 //    设置PWM为0
-//    Motor_SetPWM_Left(0U);
-//    Motor_SetPWM_Right(0U);
+    Motor_SetPWM_Left(0U);
+    Motor_SetPWM_Right(0U);
 
     //测试电机
-    Motor_SetDirLeft_Forward(); Motor_SetDirRight_Forward();
-    Motor_SetPWM_Left(800U);
-    Motor_SetPWM_Right(500U);
+//    Motor_SetDirLeft_Forward(); Motor_SetDirRight_Forward();
+//    Motor_SetPWM_Left(800U);
+//    Motor_SetPWM_Right(500U);
 }
 
 /*

@@ -26,7 +26,7 @@ cost_time_st speedTimeSt = {0U};    //存储速度获取并计算速度外环PI�
 cost_time_st oledTimeSt = {0U};     //存储oled展示时间
 
 /*
- * 中断触发姿态角解算与角度内环PD计算
+ * 中断触发姿态角解算与角度内环计算
  * */
 void It_Angle_Calculate(void)
 {
@@ -68,7 +68,7 @@ void It_Angle_Calculate(void)
 }
 
 /*
- * 中断触发获取两轮速度并计算速度外环PI与转向环PI
+ * 中断触发获取两轮速度并计算速度外环与转向环
  * */
 void It_Speed_GetVal(void)
 {
@@ -102,8 +102,8 @@ void It_OLED_Show(void)
     //上电只刷新显示一次
     if(0U == is_show_one_time) {
         //加速度计角度
-//        OLED_ShowString(1, 1, "a:");
-//        OLED_ShowString(1, 7, ".");
+        OLED_ShowString(1, 1, "a:");
+        OLED_ShowString(1, 7, ".");
 
         //陀螺仪角度
 //        OLED_ShowString(2, 1, "g:");
@@ -128,8 +128,8 @@ void It_OLED_Show(void)
 //        OLED_ShowSignedNum(3, 8, g_a_ori_val.g_z_val, 4);
 
         //展示加速度计角度
-//        OLED_ShowSignedNum(1, 3, (int32_t)Angle_GetAccel(), 3);
-//        OLED_ShowNum(1, 8, (uint32_t)((int32_t)(Angle_GetAccel()*100)%100), 2);
+        OLED_ShowSignedNum(1, 3, (int32_t)Angle_GetAccel(), 3);
+        OLED_ShowNum(1, 8, (uint32_t)((int32_t)(Angle_GetAccel()*100)%100), 2);
 
         //展示陀螺仪零漂
 //        OLED_ShowSignedNum(4, 6, (int32_t)Angle_GetGyroYBias(), 3);

@@ -19,8 +19,8 @@
 #define KI_LIMIT_SPEED  (0.f)    //速度外环积分临界值
 
 //角度内环PD参数
-#define KP_ANGLE        (-50.f*0.6f)
-#define KD_ANGLE        (-350.f*0.6f)
+#define KP_ANGLE        (-70.f*0.6f)
+#define KD_ANGLE        (-215.f*0.6f)
 
 //转向环PI参数
 #define KP_TURN         (0.f)
@@ -35,7 +35,7 @@ static volatile float aim_pwm_avg = 0.f;
 static volatile float aim_pwm_diff = 0.f;
 
 /*
- * 速度外环PI，计算目标角度
+ * 速度外环，计算目标角度
  * */
 void Pid_Speed(void)
 {
@@ -53,7 +53,7 @@ void Pid_Speed(void)
 }
 
 /*
- * 角度内环PD，计算平均PWM
+ * 角度内环，计算平均PWM
  * */
 void Pid_Angle(void)
 {
@@ -70,7 +70,7 @@ void Pid_Angle(void)
 }
 
 /*
- * 转向环PI，计算差分PWM
+ * 转向环，计算差分PWM
  * */
 void Pid_Turn(void)
 {

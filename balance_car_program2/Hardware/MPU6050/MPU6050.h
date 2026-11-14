@@ -1,5 +1,5 @@
-#ifndef SPI_TEST3_MPU6050_H
-#define SPI_TEST3_MPU6050_H
+#ifndef __MPU6050_H
+#define __MPU6050_H
 
 #include "main.h"
 
@@ -140,4 +140,4 @@ void MPU6050_Get_Gyro_Accel_OriVal(gyro_accel_ori_val_st *gyro_accel_value);
 uint8_t MPU6050_GetRxCompleted_Flag(void);
 void MPU6050_ClearRxCompleted_Flag(void);
 
-#endif //SPI_TEST3_MPU6050_H
+#endif //__MPU6050_H

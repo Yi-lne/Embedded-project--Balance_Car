@@ -6,7 +6,7 @@
 #include "MPU6050.h"
 #include <math.h>
 
-#define ACCEL_BIAS      5.9f        //加速度计角度平衡偏移量
+#define ACCEL_BIAS      6.0f        //加速度计角度平衡偏移量
 #define GYRO_PERIOD     0.005f      //陀螺仪角度累积周期
 #define ALPHA_VAL       0.96f       //互补滤波信任参数（陀螺仪为主，加速度计为辅）
 
@@ -27,7 +27,7 @@ void Angle_GyroY_Calibration()
     int16_t gyro_y;
     int32_t bias_sum = 0;
     //等待MPU6050传感器内部稳定且有一定的平稳过渡期使得零偏值稳定
-    HAL_Delay(1500);
+    HAL_Delay(2000);
     for(uint16_t i = 0; i<1000; i++){
         //获取加速度计和陀螺仪原始数据
         MPU6050_Receive_Data(GYRO_YOUT_H, rx_gyro_y, 2);
@@ -51,6 +51,7 @@ void Angle_Calculation(void)
     //计算最终姿态角
     if(0U == is_gyro_init_align){ //初始上电陀螺仪角度和加速度计角度对齐
         gyro_angle = accel_angle;
+        com_fil_angle = accel_angle;
         is_gyro_init_align = 1U;
     }else {
         //计算陀螺仪角度

@@ -252,11 +252,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if(TIM2 == htim->Instance){
         it_cnt++;
-        //中断触发姿态角解算与角度内环PD计算，5ms触发一次
+        //中断触发姿态角解算与角度内环计算，5ms触发一次
         if(0U == it_cnt%5) {
             itFlagSt.angle_calculate_flag = IT_FLAG_OK;
         }
-        //中断触发获取两轮速度并计算速度外环PI与转向环PI，50ms触发一次
+        //中断触发获取两轮速度并计算速度外环与转向环，50ms触发一次
         if(0U == it_cnt%50){
             itFlagSt.speed_get_flag = IT_FLAG_OK;
         }

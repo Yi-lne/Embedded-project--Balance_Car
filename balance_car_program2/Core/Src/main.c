@@ -110,7 +110,7 @@ int main(void)
   //初始化MPU6050
   MPU6050_Init();
   //陀螺仪零漂校准
-//  Angle_GyroY_Calibration();
+  Angle_GyroY_Calibration();
   //启动I2C2 接收的DMA，开始接收MPU6050数据
   MPU6050_StartRxDMA();
   //初始化电机
@@ -123,11 +123,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      //姿态角解算
-//      It_Angle_Calculate();
+      //姿态角解算与角度内环计算
+      It_Angle_Calculate();
 
-      //获取两轮速度
-//      It_Speed_GetVal();
+      //获取两轮速度并计算速度外环与转向环
+      It_Speed_GetVal();
 
       //OLED展示
 //      It_OLED_Show();
