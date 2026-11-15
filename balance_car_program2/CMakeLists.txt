@@ -46,11 +46,11 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-        Car_system/Motor/motor.c
-        Car_system/Angle/angle.c
-        Car_system/Interruption/it_flag.c
-        Car_system/PID/pid.c
-        Car_system/Bluetooth/bluetooth.c
+        car_system/Motor/motor.c
+        car_system/Angle/angle.c
+        car_system/Interruption/it_flag.c
+        car_system/PID/pid.c
+        car_system/Bluetooth/bluetooth.c
 
         Hardware/MPU6050/MPU6050.c
         Hardware/oled/oled.c
@@ -59,11 +59,11 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-        Car_system/Motor
-        Car_system/Angle
-        Car_system/Interruption
-        Car_system/PID
-        Car_system/Bluetooth
+        car_system/Motor
+        car_system/Angle
+        car_system/Interruption
+        car_system/PID
+        car_system/Bluetooth
 
         Hardware/MPU6050
         Hardware/oled

@@ -10,7 +10,8 @@
 #include "bluetooth.h"
 
 #define PWM_LIMIT       2.0f    //死区阈值，小于该阈值则小车不动
-#define PWM_MIN         80      //死区补偿速度（驱动电机的最小PWM）
+#define PWM_MIN_LEFT    41      //左电机死区补偿速度（驱动左电机的最小PWM）
+#define PWM_MIN_RIGHT   47      //右电机死区补偿速度（驱动右电机的最小PWM）
 #define PWM_MAX         999     //PWM最大值
 
 //速度外环PI参数
@@ -19,8 +20,8 @@
 #define KI_LIMIT_SPEED  (0.f)    //速度外环积分临界值
 
 //角度内环PD参数
-#define KP_ANGLE        (-70.f*0.6f)
-#define KD_ANGLE        (-215.f*0.6f)
+#define KP_ANGLE        (-75.f*0.6f)
+#define KD_ANGLE        (-283.f*0.6f)
 
 //转向环PI参数
 #define KP_TURN         (0.f)
@@ -102,13 +103,17 @@ void Pid_SetPWM(void)
     if(pwm_left > PWM_MAX) pwm_left = PWM_MAX; else if(pwm_left < -PWM_MAX) pwm_left = -PWM_MAX;
     if(pwm_right > PWM_MAX) pwm_right = PWM_MAX; else if(pwm_right < -PWM_MAX) pwm_right = -PWM_MAX;
 
+    //换向前短暂清零PWM，避免反向尖峰电流
+    Motor_SetPWM_Left(0U);
+    Motor_SetPWM_Right(0U);
+
     //确定左轮转向，并计算左轮整型PWM
     if(pwm_left > PWM_LIMIT){
-        pwm_int_left = (uint16_t)pwm_left + PWM_MIN;
+        pwm_int_left = (uint16_t)pwm_left + PWM_MIN_LEFT;
         Motor_SetDirLeft_Forward();
     }else if(pwm_left < -PWM_LIMIT){
         Motor_SetDirLeft_Back();
-        pwm_int_left = (uint16_t)(-pwm_left) + PWM_MIN;
+        pwm_int_left = (uint16_t)(-pwm_left) + PWM_MIN_LEFT;
     }else{
         Motor_SetDirLeft_Stop();
         pwm_int_left = 0U;
@@ -118,11 +123,11 @@ void Pid_SetPWM(void)
 
     //确定右轮转向，并计算右轮整型PWM
     if(pwm_right > PWM_LIMIT){
-        pwm_int_right = (uint16_t)pwm_right + PWM_MIN;
+        pwm_int_right = (uint16_t)pwm_right + PWM_MIN_RIGHT;
         Motor_SetDirRight_Forward();
     }else if(pwm_right < -PWM_LIMIT){
         Motor_SetDirRight_Back();
-        pwm_int_right = (uint16_t)(-pwm_right) + PWM_MIN;
+        pwm_int_right = (uint16_t)(-pwm_right) + PWM_MIN_RIGHT;
     }else{
         Motor_SetDirRight_Stop();
         pwm_int_right = 0U;
