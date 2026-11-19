@@ -22,6 +22,5 @@ void pid_speed_and_turn_task(void* pvParameters);
 void pid_set_target_speed(float speed_val);
 int32_t pid_get_pwm_left(void);
 int32_t pid_get_pwm_right(void);
-int16_t pid_get_pwm_mean_int(void);
 
 #endif //BALANCE_CAR_PROGRAM_PID_H

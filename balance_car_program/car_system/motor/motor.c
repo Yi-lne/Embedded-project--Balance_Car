@@ -79,6 +79,15 @@ void left_dir_back(void)
 }
 
 /*
+ * 设置左轮为停止
+ * */
+void left_dir_stop(void)
+{
+    HAL_GPIO_WritePin(AIN1_GPIO_Port, AIN1_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(AIN2_GPIO_Port, AIN2_Pin, GPIO_PIN_RESET);
+}
+
+/*
  * 设置右轮为前进方向
  * */
 void right_dir_forward(void)
@@ -94,4 +103,13 @@ void right_dir_back(void)
 {
     HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, GPIO_PIN_SET);
+}
+
+/*
+ * 设置右轮为停止
+ * */
+void right_dir_stop(void)
+{
+    HAL_GPIO_WritePin(BIN1_GPIO_Port, BIN1_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(BIN2_GPIO_Port, BIN2_Pin, GPIO_PIN_RESET);
 }

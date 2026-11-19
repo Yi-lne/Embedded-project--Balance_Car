@@ -134,6 +134,7 @@ typedef struct{
 void MPU6050_init(void);
 void MPU6050_transmit_data(uint8_t register_addr, uint8_t data);
 uint8_t MPU6050_receive_single_data(uint8_t register_addr);
+void MPU6050_receive_multi_data(uint8_t register_addr, uint8_t *data, uint8_t len);
 uint8_t MPU6050_StartReadIT(void);
 void MPU6050_get_gyro_accel_ori_value(gyro_accel_ori_value_st *gyro_accel_value);
 

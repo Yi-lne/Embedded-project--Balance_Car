@@ -105,6 +105,7 @@ int main(void)
     OLED_Init();
 //    OLED_Clear();
     MPU6050_init();
+    angle_gyroY_calibration();
     pid_mailbox_init();
     motor_start();
 
@@ -120,8 +121,8 @@ int main(void)
     xReturn = xTaskCreate(pid_speed_and_turn_task, "pid_speed_and_turn_task", 128, NULL, 2, &pid_speed_and_turn_task_handle);
     configASSERT(xReturn == pdTRUE);
 
-    xReturn = xTaskCreate(oled_display_task, "oled_display_task", 128, NULL, 1, &oled_task_handle);
-    configASSERT(xReturn == pdTRUE);
+//    xReturn = xTaskCreate(oled_display_task, "oled_display_task", 128, NULL, 1, &oled_task_handle);
+//    configASSERT(xReturn == pdTRUE);
 
     vTaskStartScheduler();
 

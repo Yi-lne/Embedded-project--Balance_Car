@@ -6,6 +6,10 @@
 #define PWM_LEFT_THRESHOLD      0
 #define PWM_RIGHT_THRESHOLD     0
 
+#define PWM_LIMIT            2    //死区阈值，小于该阈值则小车不动
+#define PWM_MIN_LEFT         15       //左电机死区补偿速度（驱动左电机的最小PWM）
+#define PWM_MIN_RIGHT        20       //右电机死区补偿速度（驱动右电机的最小PWM）
+
 static pid_param_st pid_speed; //速度外环句柄
 static pid_param_st pid_angle; //角度内环句柄
 static pid_param_st pid_turn;  //转向环句柄
@@ -47,12 +51,13 @@ static void pid_speed_init(pid_param_st *pid)
 
 /*
  * 角度内环PID参数初始化
+ *
  * */
 static void pid_angle_init(pid_param_st *pid)
 {
-    pid->kp = -100.f;
+    pid->kp = -35.f*0.6f;
     pid->ki = 0.f;
-    pid->kd = 0.f;
+    pid->kd = -30.f*0.6f;
     pid->last_err = 0.f;
     pid->now_err = 0.f;
     pid->err_accum = 0.f;
@@ -111,8 +116,8 @@ void pid_speed_and_turn_task(void* pvParameters)
 /*
  * 角度内环PID计算任务
  * */
-int32_t pwm_left, pwm_right; //左右轮PWM
-int16_t pwm_mean_int, pwm_diff_int; //整形化后的平均pwm和差分pwm
+float pwm_left, pwm_right; //左右轮pwm（未整型）
+uint16_t pwm_int_left, pwm_int_right;   //整型pwm
 void pid_angle_task(void* pvParameters)
 {
     TickType_t pxPreviousWakeTime = xTaskGetTickCount();
@@ -121,7 +126,7 @@ void pid_angle_task(void* pvParameters)
     float pwm_diff; //差分PWM
     pid_angle_init(&pid_angle);
     for(;;) {
-        vTaskDelayUntil(&pxPreviousWakeTime, pdMS_TO_TICKS(4));
+        vTaskDelayUntil(&pxPreviousWakeTime, pdMS_TO_TICKS(5));
         xQueueReceive(mailbox_speed_turn, &mailbox_read_msg, 0);
         //获取速度外环算出的目标角度
         pid_angle.target_val = mailbox_read_msg.target_angle;
@@ -131,6 +136,43 @@ void pid_angle_task(void* pvParameters)
         pwm_mean = pid_angle.expect_val;
         //获取差分PWM
         pwm_diff = mailbox_read_msg.turn_diff;
+
+        //计算左右轮PWM
+        pwm_left = pwm_mean + pwm_diff/2.f;
+        pwm_right = pwm_mean - pwm_diff/2.f;
+
+        //左右轮PWM限幅
+        if(pwm_left > PWM_MAX) pwm_left = PWM_MAX; else if(pwm_left < -PWM_MAX) pwm_left = -PWM_MAX;
+        if(pwm_right > PWM_MAX) pwm_right = PWM_MAX; else if(pwm_right < -PWM_MAX) pwm_right = -PWM_MAX;
+
+        //确定左轮转向，并计算左轮整型PWM
+        if(pwm_left > PWM_LIMIT){
+            // 不用固定 PWM_MIN，按输出大小比例补偿
+            pwm_int_left = (uint16_t)(pwm_left) + PWM_MIN_LEFT;
+            left_dir_forward();
+        }else if(pwm_left < -PWM_LIMIT){
+            pwm_int_left = (uint16_t)(-pwm_left)+PWM_MIN_LEFT;
+            left_dir_back();
+        }else{
+            left_dir_stop();
+            pwm_int_left = 0U;
+        }
+        //左轮整型PWM限幅
+        if(pwm_int_left > PWM_MAX) pwm_int_left = PWM_MAX;
+
+        //确定右轮转向，并计算右轮整型PWM
+        if(pwm_right > PWM_LIMIT){
+            pwm_int_right = (uint16_t)(pwm_right) + PWM_MIN_RIGHT;
+            right_dir_forward();
+        }else if(pwm_right < -PWM_LIMIT){
+            pwm_int_right = (uint16_t)(-pwm_right)+PWM_MIN_RIGHT;
+            right_dir_back();
+        }else{
+            right_dir_stop();
+            pwm_int_right = 0U;
+        }
+        //右轮整型PWM限幅
+        if(pwm_int_right > PWM_MAX) pwm_int_right = PWM_MAX;
 
         //pwm_mean、pwm_diff额限制
         if(pwm_mean>PWM_MAX){
@@ -144,45 +186,8 @@ void pid_angle_task(void* pvParameters)
             pwm_diff = -PWM_MAX;
         }
 
-        //PWM转换成整数
-        pwm_mean_int = (int16_t)pwm_mean;
-        pwm_diff_int = (int16_t)pwm_diff;
-
-        pwm_left = pwm_mean_int + pwm_diff_int;
-        pwm_right = pwm_mean_int - pwm_diff_int;
-
-        //pwm_left、pwm_right超额限制
-        if(pwm_left>PWM_MAX){
-            pwm_left = PWM_MAX;
-        }else if(pwm_left<-PWM_MAX){
-            pwm_left = -PWM_MAX;
-        }
-        if(pwm_right>PWM_MAX){
-            pwm_right = PWM_MAX;
-        }else if(pwm_right<-PWM_MAX){
-            pwm_right = -PWM_MAX;
-        }
-
-        //设置方向
-        if(pwm_left>PWM_LEFT_THRESHOLD){
-            left_dir_forward();
-        }else if(pwm_left<-PWM_LEFT_THRESHOLD){
-            pwm_left = -pwm_left;
-            left_dir_back();
-        }else{
-            pwm_left = 0;
-        }
-        if(pwm_right>PWM_RIGHT_THRESHOLD){
-            right_dir_forward();
-        }else if(pwm_right<-PWM_RIGHT_THRESHOLD){
-            pwm_right = -pwm_right;
-            right_dir_back();
-        }else{
-            pwm_right = 0;
-        }
-
         //设置PWM
-        motor_set_pwm(pwm_left, pwm_right);
+        motor_set_pwm(pwm_int_left, pwm_int_right);
     }
 }
 
@@ -199,7 +204,7 @@ static void pid_calculation(pid_param_st *pid, float observation_val)
 
     //误差积分累加
     if(pid == &pid_angle) {
-        pid->err_accum += pid->now_err*0.004f;
+        pid->err_accum += pid->now_err*0.005f;
     }else{
         pid->err_accum += pid->now_err*0.01f;
     }
@@ -233,7 +238,7 @@ void pid_set_target_speed(float speed_val)
  * */
 int32_t pid_get_pwm_left(void)
 {
-    return pwm_left;
+    return pwm_int_left;
 }
 
 /*
@@ -241,13 +246,5 @@ int32_t pid_get_pwm_left(void)
  * */
 int32_t pid_get_pwm_right(void)
 {
-    return pwm_right;
-}
-
-/*
- * 获取整形化后的平均pwm
- * */
-int16_t pid_get_pwm_mean_int(void)
-{
-    return pwm_mean_int;
+    return pwm_int_right;
 }

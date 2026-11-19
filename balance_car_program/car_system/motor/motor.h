@@ -11,5 +11,7 @@ void left_dir_forward(void);
 void left_dir_back(void);
 void right_dir_forward(void);
 void right_dir_back(void);
+void left_dir_stop(void);
+void right_dir_stop(void);
 
 #endif
