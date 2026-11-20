@@ -40,9 +40,10 @@ void Motor_Stop(void)
     Motor_SetPWM_Right(0U);
 
     //测试电机
-//    Motor_SetDirLeft_Forward(); Motor_SetDirRight_Forward();
-//    Motor_SetPWM_Left(800U);
-//    Motor_SetPWM_Right(500U);
+    //经测试，向前速度符号为正，向后为负；最高速度值（编码器数值）为170，左轮最低为1，右轮最低为2
+//    Motor_SetDirLeft_Back(); Motor_SetDirRight_Back();
+//    Motor_SetPWM_Left(1U);
+//    Motor_SetPWM_Right(2U);
 }
 
 /*

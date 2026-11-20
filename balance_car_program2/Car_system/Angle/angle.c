@@ -6,9 +6,9 @@
 #include "MPU6050.h"
 #include <math.h>
 
-#define ACCEL_BIAS      8.0f        //加速度计角度平衡偏移量
+#define ACCEL_BIAS      6.8f        //加速度计角度平衡偏移量
 #define GYRO_PERIOD     0.005f      //陀螺仪角度累积周期
-#define ALPHA_VAL       0.96f       //互补滤波信任参数（陀螺仪为主，加速度计为辅）
+#define ALPHA_VAL       0.99f       //互补滤波信任参数（陀螺仪为主，加速度计为辅）
 
 gyro_accel_ori_val_st g_a_ori_val;  //存储MPU6050的加速度计和陀螺仪初始值
 

@@ -101,6 +101,7 @@ void It_OLED_Show(void)
 //    oledTimeSt.start_cycle = DWT->CYCCNT;
     //上电只刷新显示一次
     if(0U == is_show_one_time) {
+        is_show_one_time = 1U;
         //加速度计角度
         OLED_ShowString(1, 1, "a:");
         OLED_ShowString(1, 7, ".");
@@ -127,10 +128,12 @@ void It_OLED_Show(void)
 //        OLED_ShowSignedNum(2, 8, g_a_ori_val.g_y_val, 4);
 //        OLED_ShowSignedNum(3, 8, g_a_ori_val.g_z_val, 4);
 
+        //展示互补滤波角度
+        OLED_ShowSignedNum(2, 3, (int32_t)Angle_GetComFilVal(), 3);
+        OLED_ShowNum(2, 8, (uint32_t)((int32_t)(Angle_GetComFilVal()*100)%100), 2);
         //展示加速度计角度
         OLED_ShowSignedNum(1, 3, (int32_t)Angle_GetAccel(), 3);
         OLED_ShowNum(1, 8, (uint32_t)((int32_t)(Angle_GetAccel()*100)%100), 2);
-
         //展示陀螺仪零漂
 //        OLED_ShowSignedNum(4, 6, (int32_t)Angle_GetGyroYBias(), 3);
 //        OLED_ShowNum(4, 11, (uint32_t)((int32_t)(Angle_GetGyroYBias()*100)%100), 2);
@@ -138,19 +141,18 @@ void It_OLED_Show(void)
 //        OLED_ShowSignedNum(2, 3, (int32_t)Angle_GetGyro(), 3);
 //        OLED_ShowNum(2, 8, (uint32_t)((int32_t)(Angle_GetGyro()*100)%100), 2);
 
-        //展示互补滤波角度
-        OLED_ShowSignedNum(2, 3, (int32_t)Angle_GetComFilVal(), 3);
-        OLED_ShowNum(2, 8, (uint32_t)((int32_t)(Angle_GetComFilVal()*100)%100), 2);
 
         //展示左轮速度
 //        OLED_ShowSignedNum(1, 1, motorSpeedValSt.speed_left_val, 4);
-        //展示左轮速度
+        //展示右轮速度
 //        OLED_ShowSignedNum(2, 1, motorSpeedValSt.speed_right_val, 4);
-
         //展示左轮PWM
 //        OLED_ShowNum(3, 1, Motor_PWM_GetLeft(), 4);
         //展示右轮PWM
 //        OLED_ShowNum(3, 6, Motor_PWM_GetRight(), 4);
+
+        //展示速度外环目标输出角度正负值，用于判断速度外环参数极性
+//        OLED_ShowSignedNum(3, 1, (int32_t)PID_GetAim_angle(), 3);
 
         //展示姿态角解算与角度内环PD计算时间
 //        OLED_ShowNum(1, 1, angleTimeSt.cost_us, 4);
